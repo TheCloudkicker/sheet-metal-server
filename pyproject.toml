@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "sheet-metal-server"
+version = "0.1.0"
+description = ""
+authors = ["cloudkicker <ckcameron1@gmail.com>"]
+readme = "README.md"
+packages = [{include = "sheet_metal_server"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.3"
+djangorestframework = "^3.14.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
