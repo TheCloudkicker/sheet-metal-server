@@ -13,8 +13,10 @@ from rest_framework import viewsets, status, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from ..models.job import Job
 
-class PurchaseOrdersListAPI(APIView):
+
+class JobsListAPI(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
@@ -23,12 +25,26 @@ class PurchaseOrdersListAPI(APIView):
         return Response(response, status=status.HTTP_200_OK)
 
     def get(self, request, *args, **kwargs):
-        response = "get"
+        response = []
+        for job in Job.objects.all():
+            response.append(
+                {
+                    "id": job.id,
+                    "key": job.id,
+                    "name": job.name,
+                    "start_date": "1-1-2023",
+                    "end_date": "12-31-2023",
+                    "percent_complete": 70,
+                    "target_margin": 35,
+                    "current_margin": 40,
+                    "num_issues": 2,
+                }
+            )
 
         return Response(response, status=status.HTTP_200_OK)
 
 
-class PurchaseOrdersDetailAPI(APIView):
+class JobsDetailAPI(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, pk, *args, **kwargs):
