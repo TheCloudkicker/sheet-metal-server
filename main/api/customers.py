@@ -13,10 +13,11 @@ from rest_framework import viewsets, status, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from ..models.customer import Customer
 from ..models.job import Job
 
 
-class JobsListAPI(APIView):
+class CustomersListAPI(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
@@ -26,25 +27,22 @@ class JobsListAPI(APIView):
 
     def get(self, request, *args, **kwargs):
         response = []
-        for job in Job.objects.all():
+        for customer in Customer.objects.all():
             response.append(
                 {
-                    "id": job.id,
-                    "key": job.id,
-                    "name": job.name,
-                    "start_date": "1-1-2023",
-                    "end_date": "12-31-2023",
-                    "percent_complete": 70,
-                    "target_margin": 35,
-                    "current_margin": 40,
-                    "num_issues": 2,
+                    "id": customer.id,
+                    "key": customer.id,
+                    "name": customer.name,
+                    "num_jobs_in_progress": Job.objects.filter(
+                        customer=customer
+                    ).count(),
                 }
             )
 
         return Response(response, status=status.HTTP_200_OK)
 
 
-class JobsDetailAPI(APIView):
+class CustomersDetailAPI(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, pk, *args, **kwargs):
@@ -58,17 +56,12 @@ class JobsDetailAPI(APIView):
         return Response(response, status=status.HTTP_200_OK)
 
     def get(self, request, pk, *args, **kwargs):
-        job = Job.objects.get(pk=pk)
+        customer = Customer.objects.get(pk=pk)
         response = {
-            "id": job.id,
-            "key": job.id,
-            "name": job.name,
-            "start_date": "1-1-2023",
-            "end_date": "12-31-2023",
-            "percent_complete": 70,
-            "target_margin": 35,
-            "current_margin": 40,
-            "num_issues": 2,
+            "id": customer.id,
+            "key": customer.id,
+            "name": customer.name,
+            "num_jobs_in_progress": Job.objects.filter(customer=customer).count(),
         }
 
         return Response(response, status=status.HTTP_200_OK)
