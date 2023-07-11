@@ -3,7 +3,7 @@ from .common import BaseModel
 
 
 class Customer(BaseModel):
-    name = models.CharField(max_length=256, null=False, blank=False)
+    name = models.CharField(max_length=256, null=False, blank=False, unique=True)
 
     def __str__(self):
         return f"Customer({self.id}) {self.name}"

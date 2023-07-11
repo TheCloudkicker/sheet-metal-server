@@ -13,6 +13,8 @@ from rest_framework import viewsets, status, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from ..models import PurchaseOrder
+
 
 class PurchaseOrdersListAPI(APIView):
     permission_classes = (AllowAny,)
@@ -23,7 +25,15 @@ class PurchaseOrdersListAPI(APIView):
         return Response(response, status=status.HTTP_200_OK)
 
     def get(self, request, *args, **kwargs):
-        response = "get"
+        response = []
+        for purchase_order in PurchaseOrder.objects.all():
+            response.append(
+                {
+                    "id": purchase_order.id,
+                    "key": purchase_order.id,
+                    "name": purchase_order.name,
+                }
+            )
 
         return Response(response, status=status.HTTP_200_OK)
 
@@ -42,6 +52,11 @@ class PurchaseOrdersDetailAPI(APIView):
         return Response(response, status=status.HTTP_200_OK)
 
     def get(self, request, pk, *args, **kwargs):
-        response = f"get {pk}"
+        customer = PurchaseOrder.objects.get(pk=pk)
+        response = {
+            "id": customer.id,
+            "key": customer.id,
+            "name": customer.name,
+        }
 
         return Response(response, status=status.HTTP_200_OK)
